@@ -7,30 +7,44 @@ import (
 	"github.com/yourusername/idempotency-gateway/models"
 )
 
-//store struct to hold the idempotency records 
-type Store struct{
-	mu sync.RWMutex
+// store struct to hold the idempotency records
+type Store struct {
+	mu      sync.RWMutex
 	records map[string]*models.IdempotencyRecord
-	ttl time.Duration
+	ttl     time.Duration
 }
 
-//New store function to create a new record 
-func Newstore(ttl time.Duration)* Store{
+// New store function to create a new record
+func Newstore(ttl time.Duration) *Store {
 	return &Store{
 		records: make(map[string]*models.IdempotencyRecord),
-		ttl: ttl,
+		ttl:     ttl,
 	}
 }
 
-//Get Record function to get the record from store 
-func (s *Store)GetStore(Key string)(*models.IdempotencyRecord,bool){
-	s.mu.RLock()//this sets a read lock on the store.
+// Get Record function to get the record from store
+func (s *Store) GetStore(Key string) (*models.IdempotencyRecord, bool) {
+	s.mu.RLock() //this sets a read lock on the store.
 	defer s.mu.RUnlock()
-	record,ok:=s.records[Key]
-	return record,ok
+	record, ok := s.records[Key]
+	return record, ok
 }
-//set record function to set the record in store
-func(s *Store)Set(Key string,record *models.IdempotencyRecord){
+
+// set record function to set the record in store
+func (s *Store) Set(Key string, record *models.IdempotencyRecord) {
 	s.mu.Lock()
-	defer s.mu
+	defer s.mu.Unlock()
+	s.records[Key] = record
+
+}
+
+// clean up function to remove expired  records from the store
+func (s *Store) Delete(Key string) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	delete(s.records, Key)
+}
+
+func (s *Store) IsExpired(record *models.IdempotencyRecord) bool {
+	return false
 }
