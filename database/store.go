@@ -7,14 +7,12 @@ import (
 	"github.com/yourusername/idempotency-gateway/models"
 )
 
-// store struct to hold the idempotency records
 type Store struct {
 	mu      sync.RWMutex
 	records map[string]*models.IdempotencyRecord
 	ttl     time.Duration
 }
 
-// New store function to create a new record
 func NewStore(ttl time.Duration) *Store {
 	return &Store{
 		records: make(map[string]*models.IdempotencyRecord),
@@ -22,7 +20,6 @@ func NewStore(ttl time.Duration) *Store {
 	}
 }
 
-// Get Record function to get the record from store
 func (s *Store) Get(key string) (*models.IdempotencyRecord, bool) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
@@ -30,14 +27,12 @@ func (s *Store) Get(key string) (*models.IdempotencyRecord, bool) {
 	return record, ok
 }
 
-// set record function to set the record in store
 func (s *Store) Set(key string, record *models.IdempotencyRecord) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.records[key] = record
 }
 
-// clean up function to remove expired  records from the store
 func (s *Store) Delete(key string) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -45,7 +40,10 @@ func (s *Store) Delete(key string) {
 }
 
 func (s *Store) IsExpired(record *models.IdempotencyRecord) bool {
-	return time.Since(record.CreatedAt) > s.ttl
+	if record == nil {
+		return true
+	}
+	return false
 }
 
 // Unsafe variants — used by middleware which already holds the lock
