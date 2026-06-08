@@ -17,6 +17,6 @@ type IdempotencyRecord struct {
 	Response     PaymentResponse
 	StatusCode   int
 	IsProcessing bool
-	CreateAt     time.Time
+	CreatedAt    time.Time
 	Done         chan struct{}
 }
