@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 
 	"github.com/yourusername/idempotency-gateway/database"
 	"github.com/yourusername/idempotency-gateway/handlers"
@@ -59,8 +60,10 @@ func Idempotency(store *database.Store) func(http.Handler) http.Handler {
 			newRecord := &models.IdempotencyRecord{
 				RequestHash:  hash,
 				IsProcessing: true,
+				CreatedAt:    time.Now(),
 				Done:         make(chan struct{}),
 			}
+			store.SetUnsafe(key, newRecord)
 			store.Unlock()
 
 			next.ServeHTTP(w, handlers.SetRecord(r, newRecord))

@@ -40,10 +40,7 @@ func (s *Store) Delete(key string) {
 }
 
 func (s *Store) IsExpired(record *models.IdempotencyRecord) bool {
-	if record == nil {
-		return true
-	}
-	return false
+	return time.Since(record.CreatedAt) > s.ttl
 }
 
 // Unsafe variants — used by middleware which already holds the lock
