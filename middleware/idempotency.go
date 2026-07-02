@@ -17,12 +17,13 @@ import (
 func Idempotency(store *database.Store) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			//extraction of the idempotency key from the request header.
 			key := r.Header.Get("Idempotency-Key")
 			if key == "" {
 				writeJSON(w, http.StatusBadRequest, map[string]string{"error": "Idempotency-Key header is required"})
 				return
 			}
-
+			//extraction of the request body and hashing it using SHA-256
 			body, err := io.ReadAll(r.Body)
 			if err != nil {
 				writeJSON(w, http.StatusBadRequest, map[string]string{"error": "could not read request body"})
