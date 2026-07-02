@@ -152,7 +152,7 @@ On every KEY FOUND lookup:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/idempotency-gateway.git
+git clone https://github.com/kwabsntim/idempotency-gateway.git
 cd idempotency-gateway
 
 # 2. Download dependencies

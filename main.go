@@ -4,10 +4,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/yourusername/idempotency-gateway/config"
-	"github.com/yourusername/idempotency-gateway/database"
-	"github.com/yourusername/idempotency-gateway/handlers"
-	"github.com/yourusername/idempotency-gateway/middleware"
+	"github.com/kwabsntim/idempotency-gateway/config"
+	"github.com/kwabsntim/idempotency-gateway/database"
+	"github.com/kwabsntim/idempotency-gateway/handlers"
+	"github.com/kwabsntim/idempotency-gateway/middleware"
 )
 
 func main() {

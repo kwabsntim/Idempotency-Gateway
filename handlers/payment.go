@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/yourusername/idempotency-gateway/database"
-	"github.com/yourusername/idempotency-gateway/models"
+	"github.com/kwabsntim/idempotency-gateway/database"
+	"github.com/kwabsntim/idempotency-gateway/models"
 )
 
 type contextKey string

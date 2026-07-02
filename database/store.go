@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/yourusername/idempotency-gateway/models"
+	"github.com/kwabsntim/idempotency-gateway/models"
 )
 
 type Store struct {
